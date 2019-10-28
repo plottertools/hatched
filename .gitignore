@@ -1,0 +1,8 @@
+*.svg
+*.png
+*.jpg
+*.jpeg
+/venv
+
+.DS_Store
+/.idea

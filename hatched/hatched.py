@@ -7,13 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import shapely.ops
 import svgwrite as svgwrite
-from shapely.geometry import (
-    asMultiLineString,
-    Polygon,
-    LinearRing,
-    asLinearRing,
-    MultiLineString,
-)
+from shapely.geometry import asMultiLineString, Polygon, LinearRing, MultiLineString
 from skimage import measure
 
 
@@ -33,7 +27,7 @@ def build_circular_hatch(delta, offset, w, h):
 
         # A random phase is useful for circles that end up unmasked. If several such circles
         # start and stop at the same location, a disgraceful pattern will emerge when plotting.
-        phase = random.random.rand() * 2 * math.pi
+        phase = random.random() * 2 * math.pi
 
         data = np.array(
             [
@@ -194,60 +188,3 @@ def make_hatch_svg(
     )
 
     dwg.save()
-
-
-if __name__ == "__main__":
-    # make_hatch_svg("skull.jpg", hatch_pitch=3, levels=(50, 100, 200), blur_radius=5)
-    # make_hatch_svg("skull2.jpg", hatch_pitch=5, levels=(50, 140, 200), blur_radius=1)
-    # make_hatch_svg("skull3.jpg", hatch_pitch=5, levels=(30, 100, 150), blur_radius=5)
-    # make_hatch_svg("poodle.jpg", hatch_pitch=3, levels=(50, 80, 140), blur_radius=5)
-    # make_hatch_svg(
-    #     "fish_clean.jpg", hatch_pitch=3, levels=(80, 180, 240), blur_radius=7, h_mirror=True
-    # )
-
-    # make_hatch_svg(
-    #     "IMG_6094.jpeg",
-    #     hatch_pitch=7,
-    #     #levels=(40, 80, 120),
-    #     levels=(80, 80, 40),
-    #     #levels=(40, 100, 100),
-    #     blur_radius=15,
-    #     image_scale=0.25,
-    #     invert=True,
-    # )
-
-    # make_hatch_svg(
-    #     "IMG_6094.jpeg",
-    #     hatch_pitch=7,
-    #     levels=(40, 80, 120),
-    #     # levels=(80, 80, 40),
-    #     # levels=(40, 100, 100),
-    #     blur_radius=15,
-    #     image_scale=0.25,
-    # )
-
-    # make_hatch_svg(
-    #     "my_skull.png", hatch_pitch=7, levels=(30, 100, 180), blur_radius=1,
-    # )
-
-    # make_hatch_svg(
-    #     "IMG_1328.jpg",
-    #     hatch_pitch=4,
-    #     levels=(30, 120, 230),
-    #     # levels=(80, 80, 40),
-    #     # levels=(40, 100, 100),
-    #     blur_radius=2,
-    #     image_scale=0.4,
-    #     circular=True,
-    #     #invert=True
-    # )
-
-    make_hatch_svg(
-        "IMG_2355.png",
-        hatch_pitch=4,
-        levels=(25, 80, 170),
-        blur_radius=2,
-        image_scale=0.4,
-        circular=True,
-        # invert=True
-    )

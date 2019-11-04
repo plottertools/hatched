@@ -1,6 +1,7 @@
 import math
 import os
 import random
+from typing import Tuple, Iterable
 
 import cv2
 import matplotlib.pyplot as plt
@@ -70,25 +71,58 @@ def build_mask(cnt):
     return mask
 
 
-def make_hatch_svg(
-    file_path,
-    hatch_pitch=5,
-    levels=(64, 128, 192),
-    blur_radius=10,
-    image_scale=1,
-    h_mirror=False,
-    invert=False,
-    circular=False,
-):
+def save_to_svg(file_path: str, w: int, h: int, vectors: Iterable[MultiLineString]) -> None:
+    dwg = svgwrite.Drawing(file_path, size=(w, h), profile="tiny", debug=False)
 
+    dwg.add(
+        dwg.path(
+            " ".join(
+                " ".join(("M" + " L".join(f"{x},{y}" for x, y in ls.coords)) for ls in mls)
+                for mls in vectors
+            ),
+            fill="none",
+            stroke="black",
+        )
+    )
+
+    dwg.save()
+
+
+def hatch(
+    file_path: str,
+    hatch_pitch: int = 5,
+    levels: Tuple[int, int, int] = (64, 128, 192),
+    blur_radius: int = 10,
+    image_scale: float = 1.0,
+    interpolation: int = cv2.INTER_LINEAR,
+    h_mirror: bool = False,
+    invert: bool = False,
+    circular: bool = False,
+) -> None:
+
+    """
+    Create hatched shading vector for an image, display it and save it to svg.
+    :param file_path: input image path
+    :param hatch_pitch: hatching pitch in pixel (correspond to the densest possible hatching)
+    :param levels: pixel value of the 3 threshold between black, dark, light and white (0-255)
+    :param blur_radius: blurring radius to apply on the input image (0 to disable)
+    :param image_scale: scale factor to apply on the image before processing
+    :param interpolation: interpolation to apply for scaling (typically either
+        `cv2.INTER_LINEAR` or `cv2.INTER_NEAREST`)
+    :param h_mirror: apply horizontal mirror on the image if True
+    :param invert: invert pixel value of the input image before processing (in this case, the
+        level thresholds are inverted as well)
+    :param circular: use circular hatching instead of diagonal
+    :return:
+    """
+
+    # Load the image, resize it and apply blur
     img = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
-
-    img = cv2.blur(img, (blur_radius, blur_radius))
-
     scale_x = int(img.shape[1] * image_scale)
     scale_y = int(img.shape[0] * image_scale)
-    img = cv2.resize(img, (scale_x, scale_y))
-
+    img = cv2.resize(img, (scale_x, scale_y), interpolation=interpolation)
+    if blur_radius > 0:
+        img = cv2.blur(img, (blur_radius, blur_radius))
     h, w = img.shape
 
     if h_mirror:
@@ -139,9 +173,18 @@ def make_hatch_svg(
     except Exception as exc:
         print(f"Error: {exc}")
 
+    # save vector data to svg file
+    save_to_svg(
+        os.path.splitext(file_path)[0] + ".svg", w, h, [light_mls, dark_mls, black_mls]
+    )
+
+    # Plot everything
+    # ===============
+
     plt.subplot(1, 2, 1)
     plt.imshow(img, cmap=plt.cm.gray)
 
+    # noinspection PyShadowingNames
     def plot_cnt(contours, spec):
         for cnt in contours:
             plt.plot(cnt[:, 1], cnt[:, 0], spec, linewidth=2)
@@ -171,20 +214,3 @@ def make_hatch_svg(
     plt.yticks([])
 
     plt.show()
-
-    dwg = svgwrite.Drawing(
-        os.path.splitext(file_path)[0] + ".svg", size=(w, h), profile="tiny", debug=False
-    )
-
-    dwg.add(
-        dwg.path(
-            " ".join(
-                " ".join(("M" + " L".join(f"{x},{y}" for x, y in ls.coords)) for ls in mls)
-                for mls in [light_mls, dark_mls, black_mls]
-            ),
-            fill="none",
-            stroke="black",
-        )
-    )
-
-    dwg.save()

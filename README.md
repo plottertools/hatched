@@ -1,6 +1,6 @@
-# hatched
+# _hatched_
 
-Convert photos to plotter-friendly hatched pattern.
+Convert images to plotter-friendly hatched patterns.
 
 Built with [OpenCV](https://github.com/skvark/opencv-python), [scikit-image](https://scikit-image.org),
 [Shapely](https://github.com/Toblerity/Shapely), [matplotlib](https://matplotlib.org) and

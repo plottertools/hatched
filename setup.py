@@ -22,7 +22,6 @@ setup(
         "scikit-image",
         "svgwrite",
         "shapely",
-        "numpy",
         "matplotlib",
         "opencv-python",
     ],

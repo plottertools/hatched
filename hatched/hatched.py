@@ -98,6 +98,7 @@ def hatch(
     h_mirror: bool = False,
     invert: bool = False,
     circular: bool = False,
+    show_plot: bool = True,
 ) -> None:
 
     """
@@ -113,6 +114,7 @@ def hatch(
     :param invert: invert pixel value of the input image before processing (in this case, the
         level thresholds are inverted as well)
     :param circular: use circular hatching instead of diagonal
+    :param show_plot: display contours and final results with matplotlib
     :return:
     """
 
@@ -181,36 +183,37 @@ def hatch(
     # Plot everything
     # ===============
 
-    plt.subplot(1, 2, 1)
-    plt.imshow(img, cmap=plt.cm.gray)
+    if show_plot:
+        plt.subplot(1, 2, 1)
+        plt.imshow(img, cmap=plt.cm.gray)
 
-    # noinspection PyShadowingNames
-    def plot_cnt(contours, spec):
-        for cnt in contours:
-            plt.plot(cnt[:, 1], cnt[:, 0], spec, linewidth=2)
+        # noinspection PyShadowingNames
+        def plot_cnt(contours, spec):
+            for cnt in contours:
+                plt.plot(cnt[:, 1], cnt[:, 0], spec, linewidth=2)
 
-    plot_cnt(black_cnt, "b-")
-    plot_cnt(dark_cnt, "g-")
-    plot_cnt(light_cnt, "r-")
+        plot_cnt(black_cnt, "b-")
+        plot_cnt(dark_cnt, "g-")
+        plot_cnt(light_cnt, "r-")
 
-    plt.subplot(1, 2, 2)
+        plt.subplot(1, 2, 2)
 
-    if invert:
-        # plt.style.use('dark_background')
-        plt.gca().set_facecolor((0, 0, 0))
-        spec = "w-"
-    else:
-        spec = "k-"
+        if invert:
+            # plt.style.use('dark_background')
+            plt.gca().set_facecolor((0, 0, 0))
+            spec = "w-"
+        else:
+            spec = "k-"
 
-    for mls in [light_mls, dark_mls, black_mls]:
-        for ls in mls:
-            plt.plot(ls.xy[0], h - np.array(ls.xy[1]), spec, lw=0.3)
+        for mls in [light_mls, dark_mls, black_mls]:
+            for ls in mls:
+                plt.plot(ls.xy[0], h - np.array(ls.xy[1]), spec, lw=0.3)
 
-    # for ls in light_p.boundary:
-    #     plt.plot(ls.xy[0], h - np.array(ls.xy[1]), "r-", lw=0.3)
+        # for ls in light_p.boundary:
+        #     plt.plot(ls.xy[0], h - np.array(ls.xy[1]), "r-", lw=0.3)
 
-    plt.axis("equal")
-    plt.xticks([])
-    plt.yticks([])
+        plt.axis("equal")
+        plt.xticks([])
+        plt.yticks([])
 
-    plt.show()
+        plt.show()

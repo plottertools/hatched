@@ -44,12 +44,13 @@ Call the function `hatched.hatch()` to process your image. It takes the followin
 - `file_path`: input image (most common format are accepted)
 - `image_scale`: scale factor to apply to the image before processing
 - `interpolation`: interpolation to apply for scaling (typically either `cv2.INTER_LINEAR` or `cv2.INTER_NEAREST`)
-- `blur_radius`: blurring raidus to apply on the input image (0 to disable)
+- `blur_radius`: blurring radius to apply on the input image (0 to disable)
 - `hatch_pitch`: hatching pitch in pixel (corresponds to the densest possible hatching)
 - `levels`: tuple of the 3 thresholds between black, dark, light and white (0-255)
 - `h_mirror`: apply horizontal mirror on the image if True
 - `invert`: invert pixel value of the input image before processing (in this case, the level thresholds are inverted as well)
 - `circular`: use circular hatching instead of diagonal
+- `show_plot`: display contours and final results with matplotlib
 
 ## License
 

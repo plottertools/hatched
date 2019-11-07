@@ -12,6 +12,7 @@ setup(
     version="0.0.1",
     description="Convert images to plotter-friendly hatched patterns",
     long_description=readme,
+    long_description_content_type="text/markdown",
     author="Antoine Beyeler",
     author_email="abeyeler@gmail.com",
     url="https://github.com/abey79/hatched",
@@ -24,5 +25,10 @@ setup(
         "numpy",
         "matplotlib",
         "opencv-python",
+    ],
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
     ],
 )

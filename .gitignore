@@ -7,5 +7,9 @@
 .DS_Store
 /.idea
 __pycache__
+pip-wheel-metadata
+*.egg-info
+/build
+/dist
 
 /my_work

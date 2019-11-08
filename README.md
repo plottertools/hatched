@@ -50,7 +50,8 @@ Call the function `hatched.hatch()` to process your image. It takes the followin
 - `h_mirror`: apply horizontal mirror on the image if True
 - `invert`: invert pixel value of the input image before processing (in this case, the level thresholds are inverted as well)
 - `circular`: use circular hatching instead of diagonal
-- `show_plot`: display contours and final results with matplotlib
+- `show_plot`: (default True) display contours and final results with matplotlib
+- `save_svg`: (default True) controls whether or not an output SVG file is created 
 
 ## License
 

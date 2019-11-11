@@ -115,7 +115,7 @@ def _load_image(
 
 def _build_hatch(
     img: np.ndarray,
-    hatch_pitch: float = 5.,
+    hatch_pitch: float = 5.0,
     levels: Tuple[int, int, int] = (64, 128, 192),
     circular: bool = False,
     invert: bool = False,
@@ -147,6 +147,10 @@ def _build_hatch(
             build_func = _build_circular_hatch
         else:
             build_func = _build_diagonal_hatch
+
+        if not circular:
+            # correct offset to ensure desired distance between hatches
+            hatch_pitch /= math.cos(math.pi / 4)
 
         light_lines = build_func(4 * hatch_pitch, 0, w, h)
         dark_lines = build_func(4 * hatch_pitch, 2 * hatch_pitch, w, h)

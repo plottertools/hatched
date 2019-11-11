@@ -12,7 +12,7 @@ from shapely.geometry import asMultiLineString, Polygon, LinearRing, MultiLineSt
 from skimage import measure
 
 
-def _build_circular_hatch(delta, offset, w, h):
+def _build_circular_hatch(delta: float, offset: float, w: int, h: int):
     center_x = w / 2
     center_y = h / 2
 
@@ -45,9 +45,9 @@ def _build_circular_hatch(delta, offset, w, h):
     return mls.intersection(p)
 
 
-def _build_diagonal_hatch(delta, offset, w, h):
+def _build_diagonal_hatch(delta: float, offset: float, w: int, h: int):
     lines = []
-    for i in range(offset, h + w + 1, delta):
+    for i in np.arange(offset, h + w + 1, delta):
         if i < w:
             start = (i, 0)
         else:
@@ -115,7 +115,7 @@ def _load_image(
 
 def _build_hatch(
     img: np.ndarray,
-    hatch_pitch: int = 5,
+    hatch_pitch: float = 5.,
     levels: Tuple[int, int, int] = (64, 128, 192),
     circular: bool = False,
     invert: bool = False,
@@ -178,7 +178,7 @@ def _build_hatch(
 
 def hatch(
     file_path: str,
-    hatch_pitch: int = 5,
+    hatch_pitch: float = 5,
     levels: Tuple[int, int, int] = (64, 128, 192),
     blur_radius: int = 10,
     image_scale: float = 1.0,

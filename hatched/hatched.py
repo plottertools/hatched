@@ -5,6 +5,7 @@ from typing import Tuple, Iterable, Any
 
 import cv2
 import matplotlib.pyplot as plt
+import matplotlib.collections
 import numpy as np
 import shapely.ops
 import svgwrite as svgwrite
@@ -251,13 +252,17 @@ def hatch(
 
         if invert:
             plt.gca().set_facecolor((0, 0, 0))
-            spec = "w-"
+            color = (1, 1, 1)
         else:
-            spec = "k-"
+            color = (0, 0, 0)
 
-        for ls in mls:
-            plt.plot(ls.xy[0], img.shape[1] - np.array(ls.xy[1]), spec, lw=0.3)
+        plt.gca().add_collection(
+            matplotlib.collections.LineCollection(
+                (ls.coords for ls in mls), color=color, lw=0.3
+            )
+        )
 
+        plt.gca().invert_yaxis()
         plt.axis("equal")
         plt.xticks([])
         plt.yticks([])

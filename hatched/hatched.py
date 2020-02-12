@@ -63,12 +63,33 @@ def _build_diagonal_hatch(delta: float, offset: float, w: int, h: int):
     return np.array(lines)
 
 
+def _plot_poly(geom, colspec=""):
+    plt.plot(*geom.exterior.xy, colspec)
+    for i in geom.interiors:
+        plt.plot(*i.xy, colspec)
+
+
+def _plot_geom(geom, colspec=""):
+    if geom.geom_type == "Polygon":
+        _plot_poly(geom, colspec)
+    elif geom.geom_type == "MultiPolygon":
+        for p in geom:
+            _plot_poly(p, colspec)
+
+
 def _build_mask(cnt):
     lr = [LinearRing(p[:, [1, 0]]) for p in cnt if len(p) >= 4]
-    mask = shapely.ops.unary_union([Polygon(r).buffer(0.5) for r in lr if r.is_ccw])
-    mask = mask.difference(
-        shapely.ops.unary_union([Polygon(r).buffer(-0.5) for r in lr if not r.is_ccw])
-    )
+
+    mask = None
+    for r in lr:
+        if mask is None:
+            mask = Polygon(r)
+        else:
+            if r.is_ccw:
+                mask = mask.union(Polygon(r).buffer(0.5))
+            else:
+                mask = mask.difference(Polygon(r).buffer(-0.5))
+
     return mask
 
 
@@ -236,6 +257,7 @@ def hatch(
     # ===============
 
     if show_plot:
+        plt.figure()
         plt.subplot(1, 2, 1)
         plt.imshow(img, cmap=plt.cm.gray)
 

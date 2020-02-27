@@ -19,6 +19,8 @@ setup(
     license=license_text,
     packages=find_packages(exclude=("examples", "tests")),
     install_requires=[
+        "click",
+        "vpype @ git+https://github.com/abey79/vpype.git",
         "scikit-image",
         "svgwrite",
         "shapely",
@@ -30,4 +32,8 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    entry_points="""
+            [vpype.plugins]
+            hatched=hatched.vpype_plugin:hatched_gen
+        """,
 )

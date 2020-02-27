@@ -1,5 +1,7 @@
 # _hatched_
 
+<img src="https://i.imgur.com/QLlBpNU.png" width=300 /> <img src="https://i.imgur.com/fRIrPV2.jpg" width=300 />
+
 Library and [vpype](https://github.com/abey79/vpype) plug-in to convert images to plotter-friendly, hatched patterns.
 
 Built with [OpenCV](https://github.com/skvark/opencv-python), [scikit-image](https://scikit-image.org),

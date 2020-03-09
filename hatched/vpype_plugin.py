@@ -4,9 +4,7 @@ import click
 import cv2
 import hatched
 
-from vpype.decorators import generator
-from vpype.model import LineCollection
-from vpype.utils import Length
+from vpype import LineCollection, Length, generator
 
 
 @click.command("hatched")

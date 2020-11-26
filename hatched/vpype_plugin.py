@@ -4,7 +4,7 @@ import click
 import cv2
 import hatched
 
-from vpype import LineCollection, Length, generator
+import vpype as vp
 
 
 @click.command("hatched")
@@ -35,7 +35,7 @@ from vpype import LineCollection, Length, generator
     "-p",
     "--pitch",
     default=5,
-    type=Length(),
+    type=vp.LengthType(),
     help="Hatching pitch for the densest zones. This option understands supported units.",
 )
 @click.option(
@@ -53,7 +53,7 @@ from vpype import LineCollection, Length, generator
     is_flag=True,
     help="Display the contours and resulting pattern using matplotlib.",
 )
-@generator
+@vp.generator
 def hatched_gen(
     filename: str,
     levels,
@@ -79,7 +79,7 @@ def hatched_gen(
     if interpolation == "nearest":
         interp = cv2.INTER_NEAREST
 
-    return LineCollection(
+    return vp.LineCollection(
         hatched.hatch(
             file_path=filename,
             levels=levels,

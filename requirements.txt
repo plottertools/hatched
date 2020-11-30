@@ -6,4 +6,4 @@ matplotlib
 opencv-python
 black
 click
-git+https://github.com/abey79/vpype#egg=vpype
+vpype

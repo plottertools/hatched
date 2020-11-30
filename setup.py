@@ -20,7 +20,7 @@ setup(
     packages=find_packages(exclude=("examples", "tests")),
     install_requires=[
         "click",
-        "vpype @ git+https://github.com/abey79/vpype.git",
+        "vpype",
         "scikit-image",
         "svgwrite",
         "shapely",

@@ -18,7 +18,7 @@ Using `hatched` as a [vpype](https://github.com/abey79/vpype) plug-in is the eas
 simply install `hatched` with the following command, ideally in a virtual environment:
 
 ```bash
-$ pip install git+https://github.com/abey79/hatched.git#egg=hatched
+$ pip install git+https://github.com/plottertools/hatched.git#egg=hatched
 ```
 
 `vpype` is automatically installed with `hatched`, so no further steps are required.
@@ -71,7 +71,7 @@ To play with _hatched_, you need to checkout the source and install the dependen
 example with the following steps:
 
 ```bash
-$ git clone https://github.com/abey79/hatched.git
+$ git clone https://github.com/plottertools/hatched.git
 $ cd hatched
 $ python3 -m venv venv
 $ source venv/bin/activate

@@ -61,7 +61,7 @@ To create a SVG, combine the `hatched` command with the `write` command (check `
 information). Here is an example:
 
 ```bash
-$ vpype hatched --levels 64 128 192 -s 0.5 -p 4 input.jpg write --page-format a4 --center output.svg
+$ vpype hatched --levels 64 128 192 -s 0.5 -p 4 input.jpg layout a4 write output.svg
 ```
 
 

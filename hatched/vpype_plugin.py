@@ -48,6 +48,13 @@ import vpype as vp
     "-c", "--circular", is_flag=True, help="Use circular instead of diagonal hatches."
 )
 @click.option(
+    "-a",
+    "--angle",
+    default=45,
+    type=float,
+    help="Hatching angle for diagonal hatches (in degrees)"
+)
+@click.option(
     "-d",
     "--show-plot",
     is_flag=True,
@@ -63,6 +70,7 @@ def hatched_gen(
     pitch: int,
     invert: bool,
     circular: bool,
+    angle: float,
     show_plot: bool,
 ):
     """
@@ -89,6 +97,7 @@ def hatched_gen(
             hatch_pitch=pitch,
             invert=invert,
             circular=circular,
+            hatch_angle=angle,
             show_plot=show_plot,
             h_mirror=False,  # this is best handled by vpype
             save_svg=False,  # this is best handled by vpype

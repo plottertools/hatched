@@ -50,7 +50,7 @@ def _build_diagonal_hatch(delta: float, offset: float, w: int, h: int, angle: fl
     # Keep angle between 0 and 180
     angle = angle % 180
     # Convert angle to rads
-    angle_rad = angle*math.pi/180
+    angle_rad = angle * math.pi / 180
 
     lines = []
     # Draw vertical lines
@@ -68,35 +68,35 @@ def _build_diagonal_hatch(delta: float, offset: float, w: int, h: int, angle: fl
             lines.append([start, stop])
 
     elif angle < 90:
-        for i in np.arange(offset, h/math.tan(angle_rad) + w + 1, delta):
+        for i in np.arange(offset, h / math.tan(angle_rad) + w + 1, delta):
             j = abs(i * math.tan(angle_rad))
-            
+
             if i <= w:
                 start = (i, 0)
             else:
-                start = (w, (i - w)*j/i)
-            
-            if j <= h :
+                start = (w, (i - w) * j / i)
+
+            if j <= h:
                 stop = (0, j)
             else:
-                stop = ((j - h)*i/j, h)
-            
+                stop = ((j - h) * i / j, h)
+
             lines.append([start, stop])
-    
+
     else:
-        for i in np.arange(h/math.tan(angle_rad) + offset, w + 1 , delta):
-            j = abs((w-i) * math.tan(math.pi - angle_rad))
-            
+        for i in np.arange(h / math.tan(angle_rad) + offset, w + 1, delta):
+            j = abs((w - i) * math.tan(math.pi - angle_rad))
+
             if i >= 0:
                 start = (i, 0)
             else:
-                start = (0, -i*j/(w-i))
+                start = (0, -i * j / (w - i))
 
             if j >= h:
-                stop = (w- (j-h)*(w-i)/j, h)
+                stop = (w - (j - h) * (w - i) / j, h)
             else:
                 stop = (w, j)
-            
+
             lines.append([start, stop])
     return np.array(lines)
 
@@ -208,12 +208,11 @@ def _build_hatch(
         if circular:
             build_func = _build_circular_hatch
         else:
-            extra_args['angle'] = hatch_angle
+            extra_args["angle"] = hatch_angle
             build_func = _build_diagonal_hatch
             # correct offset to ensure desired distance between hatches
             if hatch_angle != 0:
-                hatch_pitch /= math.sin((hatch_angle % 180)*math.pi/180)
-            
+                hatch_pitch /= math.sin((hatch_angle % 180) * math.pi / 180)
 
         light_lines = build_func(4 * hatch_pitch, 0, w, h, **extra_args)
         dark_lines = build_func(4 * hatch_pitch, 2 * hatch_pitch, w, h, **extra_args)
@@ -287,7 +286,12 @@ def hatch(
     )
 
     mls, black_cnt, dark_cnt, light_cnt = _build_hatch(
-        img, hatch_pitch=hatch_pitch, levels=levels, invert=invert, circular=circular, hatch_angle=hatch_angle,
+        img,
+        hatch_pitch=hatch_pitch,
+        levels=levels,
+        invert=invert,
+        circular=circular,
+        hatch_angle=hatch_angle,
     )
 
     if save_svg:

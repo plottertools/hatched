@@ -52,7 +52,7 @@ import vpype as vp
     "--angle",
     default=45,
     type=float,
-    help="Hatching angle for diagonal hatches (in degrees)"
+    help="Hatching angle for diagonal hatches (in degrees)",
 )
 @click.option(
     "-d",

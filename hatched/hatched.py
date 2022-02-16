@@ -13,14 +13,16 @@ from shapely.geometry import asMultiLineString, Polygon, LinearRing, MultiLineSt
 from skimage import measure
 
 
-def _build_circular_hatch(delta: float, offset: float, w: int, h: int, center: Tuple[float,float] = (0.5, 0.5)):
+def _build_circular_hatch(
+    delta: float, offset: float, w: int, h: int, center: Tuple[float, float] = (0.5, 0.5)
+):
     center_x = w * center[0]
     center_y = h * center[1]
 
     ls = []
     # If center_x or center_y > 1, ensure the full image is covered with lines
-    max_radius = max(math.sqrt(w**2 + h**2), math.sqrt(center_x**2  + center_y**2))
-    
+    max_radius = max(math.sqrt(w**2 + h**2), math.sqrt(center_x**2 + center_y**2))
+
     for r in np.arange(offset, max_radius, delta):
         # make a tiny circle as point in the center
         if r == 0:
@@ -47,7 +49,6 @@ def _build_circular_hatch(delta: float, offset: float, w: int, h: int, center: T
     # Crop the circle to the final dimension
     p = Polygon([(0, 0), (w, 0), (w, h), (0, h)])
     return mls.intersection(p)
-
 
 
 def _build_diagonal_hatch(delta: float, offset: float, w: int, h: int, angle: float = 45):

@@ -46,20 +46,58 @@ def _build_circular_hatch(delta: float, offset: float, w: int, h: int):
     return mls.intersection(p)
 
 
-def _build_diagonal_hatch(delta: float, offset: float, w: int, h: int):
+def _build_diagonal_hatch(delta: float, offset: float, w: int, h: int, angle: float = 45):
+    # Keep angle between 0 and 180
+    angle = angle % 180
+    # Convert angle to rads
+    angle_rad = angle * math.pi / 180
+
     lines = []
-    for i in np.arange(offset, h + w + 1, delta):
-        if i < w:
+    # Draw vertical lines
+    if angle == 90:
+        for i in np.arange(offset, w + 1, delta):
             start = (i, 0)
-        else:
-            start = (w, i - w)
+            stop = (i, h)
+            lines.append([start, stop])
 
-        if i < h:
-            stop = (0, i)
-        else:
-            stop = (i - h, h)
+    # Draw horizontal lines
+    elif angle == 0:
+        for j in np.arange(offset, h + 1, delta):
+            start = (0, j)
+            stop = (w, j)
+            lines.append([start, stop])
 
-        lines.append([start, stop])
+    elif angle < 90:
+        for i in np.arange(offset, h / math.tan(angle_rad) + w + 1, delta):
+            j = abs(i * math.tan(angle_rad))
+
+            if i <= w:
+                start = (i, 0)
+            else:
+                start = (w, (i - w) * j / i)
+
+            if j <= h:
+                stop = (0, j)
+            else:
+                stop = ((j - h) * i / j, h)
+
+            lines.append([start, stop])
+
+    else:
+        for i in np.arange(h / math.tan(angle_rad) + offset, w + 1, delta):
+            j = abs((w - i) * math.tan(math.pi - angle_rad))
+
+            if i >= 0:
+                start = (i, 0)
+            else:
+                start = (0, -i * j / (w - i))
+
+            if j >= h:
+                stop = (w - (j - h) * (w - i) / j, h)
+            else:
+                stop = (w, j)
+
+            lines.append([start, stop])
     return np.array(lines)
 
 
@@ -141,6 +179,7 @@ def _build_hatch(
     levels: Tuple[int, int, int] = (64, 128, 192),
     circular: bool = False,
     invert: bool = False,
+    hatch_angle: float = 45,
 ) -> Tuple[MultiLineString, Any, Any, Any]:
     if invert:
         levels = tuple(255 - i for i in reversed(levels))
@@ -165,18 +204,19 @@ def _build_hatch(
         dark_p = _build_mask(dark_cnt)
         light_p = _build_mask(light_cnt)
 
+        extra_args = {}
         if circular:
             build_func = _build_circular_hatch
         else:
+            extra_args["angle"] = hatch_angle
             build_func = _build_diagonal_hatch
-
-        if not circular:
             # correct offset to ensure desired distance between hatches
-            hatch_pitch /= math.cos(math.pi / 4)
+            if hatch_angle != 0:
+                hatch_pitch /= math.sin((hatch_angle % 180) * math.pi / 180)
 
-        light_lines = build_func(4 * hatch_pitch, 0, w, h)
-        dark_lines = build_func(4 * hatch_pitch, 2 * hatch_pitch, w, h)
-        black_lines = build_func(2 * hatch_pitch, hatch_pitch, w, h)
+        light_lines = build_func(4 * hatch_pitch, 0, w, h, **extra_args)
+        dark_lines = build_func(4 * hatch_pitch, 2 * hatch_pitch, w, h, **extra_args)
+        black_lines = build_func(2 * hatch_pitch, hatch_pitch, w, h, **extra_args)
 
         frame = Polygon([(3, 3), (w - 6, 3), (w - 6, h - 6), (3, h - 6)])
 
@@ -212,6 +252,7 @@ def hatch(
     h_mirror: bool = False,
     invert: bool = False,
     circular: bool = False,
+    hatch_angle: float = 45,
     show_plot: bool = True,
     save_svg: bool = True,
 ) -> MultiLineString:
@@ -229,6 +270,7 @@ def hatch(
     :param invert: invert pixel value of the input image before processing (in this case, the
         level thresholds are inverted as well)
     :param circular: use circular hatching instead of diagonal
+    :param hatch_angle: angle that defines hatching inclination (degrees)
     :param show_plot: display contours and final results with matplotlib
     :param save_svg: controls whether or not an output svg file is created
     :return: MultiLineString Shapely object of the resulting hatch pattern
@@ -244,7 +286,12 @@ def hatch(
     )
 
     mls, black_cnt, dark_cnt, light_cnt = _build_hatch(
-        img, hatch_pitch=hatch_pitch, levels=levels, invert=invert, circular=circular
+        img,
+        hatch_pitch=hatch_pitch,
+        levels=levels,
+        invert=invert,
+        circular=circular,
+        hatch_angle=hatch_angle,
     )
 
     if save_svg:

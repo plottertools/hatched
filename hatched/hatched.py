@@ -278,7 +278,7 @@ def hatch(
     :param invert: invert pixel value of the input image before processing (in this case, the
         level thresholds are inverted as well)
     :param circular: use circular hatching instead of diagonal
-    :param center: relative x and y position for the center of circles for using circular
+    :param center: relative x and y position for the center of circles when using circular
         hatching. Defaults to (0.5, 0.5) corresponding to the center of the image
     :param hatch_angle: angle that defines hatching inclination (degrees)
     :param show_plot: display contours and final results with matplotlib

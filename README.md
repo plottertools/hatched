@@ -51,6 +51,9 @@ Options:
   -x, --invert                    Invert the image (and levels) before
                                   applying thresholds.
   -c, --circular                  Use circular instead of diagonal hatches.
+  -o, --center                    Origin of circles relative to the image size.
+                                  For example, (0.5, 0.5) corresponds to the 
+                                  center of the image.
   -a, --angle                     Angle for diagonal hatches (in degrees)
   -d, --show-plot                 Display the contours and resulting pattern
                                   using matplotlib.
@@ -107,6 +110,7 @@ Call the function `hatched.hatch()` to process your image. It takes the followin
 - `h_mirror`: apply horizontal mirror on the image if True
 - `invert`: invert pixel value of the input image before processing (in this case, the level thresholds are inverted as well)
 - `circular`: use circular hatching instead of diagonal
+- `center`: relative position of cirles' center when using circular hatching
 - `hatch_angle`: hatching angle for diagonal hatches (in degrees)
 - `show_plot`: (default True) display contours and final results with matplotlib
 - `save_svg`: (default True) controls whether or not an output SVG file is created 

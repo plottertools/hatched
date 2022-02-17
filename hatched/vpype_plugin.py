@@ -48,6 +48,14 @@ import vpype as vp
     "-c", "--circular", is_flag=True, help="Use circular instead of diagonal hatches."
 )
 @click.option(
+    "-o",
+    "--center",
+    nargs=2,
+    type=float,
+    default=(0.5, 0.5),
+    help="Relative coordinates of the circles' origin for circular hatching. Defaults to (0.5, 0.5) for image center.",
+)
+@click.option(
     "-a",
     "--angle",
     default=45,
@@ -70,6 +78,7 @@ def hatched_gen(
     pitch: int,
     invert: bool,
     circular: bool,
+    center,
     angle: float,
     show_plot: bool,
 ):
@@ -97,6 +106,7 @@ def hatched_gen(
             hatch_pitch=pitch,
             invert=invert,
             circular=circular,
+            center=center,
             hatch_angle=angle,
             show_plot=show_plot,
             h_mirror=False,  # this is best handled by vpype

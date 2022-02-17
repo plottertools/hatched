@@ -13,12 +13,17 @@ from shapely.geometry import asMultiLineString, Polygon, LinearRing, MultiLineSt
 from skimage import measure
 
 
-def _build_circular_hatch(delta: float, offset: float, w: int, h: int):
-    center_x = w / 2
-    center_y = h / 2
+def _build_circular_hatch(
+    delta: float, offset: float, w: int, h: int, center: Tuple[float, float] = (0.5, 0.5)
+):
+    center_x = w * center[0]
+    center_y = h * center[1]
 
     ls = []
-    for r in np.arange(offset, math.sqrt(w * w + h * h), delta):
+    # If center_x or center_y > 1, ensure the full image is covered with lines
+    max_radius = max(math.sqrt(w**2 + h**2), math.sqrt(center_x**2 + center_y**2))
+
+    for r in np.arange(offset, max_radius, delta):
         # make a tiny circle as point in the center
         if r == 0:
             r = 0.001
@@ -178,6 +183,7 @@ def _build_hatch(
     hatch_pitch: float = 5.0,
     levels: Tuple[int, int, int] = (64, 128, 192),
     circular: bool = False,
+    center: Tuple[float, float] = (0.5, 0.5),
     invert: bool = False,
     hatch_angle: float = 45,
 ) -> Tuple[MultiLineString, Any, Any, Any]:
@@ -206,6 +212,7 @@ def _build_hatch(
 
         extra_args = {}
         if circular:
+            extra_args["center"] = center
             build_func = _build_circular_hatch
         else:
             extra_args["angle"] = hatch_angle
@@ -252,6 +259,7 @@ def hatch(
     h_mirror: bool = False,
     invert: bool = False,
     circular: bool = False,
+    center: Tuple[float, float] = (0.5, 0.5),
     hatch_angle: float = 45,
     show_plot: bool = True,
     save_svg: bool = True,
@@ -270,6 +278,8 @@ def hatch(
     :param invert: invert pixel value of the input image before processing (in this case, the
         level thresholds are inverted as well)
     :param circular: use circular hatching instead of diagonal
+    :param center: relative x and y position for the center of circles when using circular
+        hatching. Defaults to (0.5, 0.5) corresponding to the center of the image
     :param hatch_angle: angle that defines hatching inclination (degrees)
     :param show_plot: display contours and final results with matplotlib
     :param save_svg: controls whether or not an output svg file is created
@@ -291,6 +301,7 @@ def hatch(
         levels=levels,
         invert=invert,
         circular=circular,
+        center=center,
         hatch_angle=hatch_angle,
     )
 

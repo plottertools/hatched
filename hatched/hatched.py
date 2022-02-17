@@ -142,7 +142,7 @@ def _save_to_svg(file_path: str, w: int, h: int, vectors: Iterable[MultiLineStri
     dwg.add(
         dwg.path(
             " ".join(
-                " ".join(("M" + " L".join(f"{x},{y}" for x, y in ls.coords)) for ls in mls)
+                " ".join(("M" + " L".join(f"{x},{y}" for x, y in ls.coords)) for ls in mls.geoms)
                 for mls in vectors
             ),
             fill="none",
@@ -338,7 +338,7 @@ def hatch(
 
         plt.gca().add_collection(
             matplotlib.collections.LineCollection(
-                (ls.coords for ls in mls), color=color, lw=0.3
+                (ls.coords for ls in mls.geoms), color=color, lw=0.3
             )
         )
 

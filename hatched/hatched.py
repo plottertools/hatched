@@ -9,7 +9,7 @@ import matplotlib.collections
 import numpy as np
 import shapely.ops
 import svgwrite as svgwrite
-from shapely.geometry import asMultiLineString, Polygon, LinearRing, MultiLineString
+from shapely.geometry import Polygon, LinearRing, MultiLineString
 from skimage import measure
 
 
@@ -142,7 +142,7 @@ def _save_to_svg(file_path: str, w: int, h: int, vectors: Iterable[MultiLineStri
     dwg.add(
         dwg.path(
             " ".join(
-                " ".join(("M" + " L".join(f"{x},{y}" for x, y in ls.coords)) for ls in mls)
+                " ".join(("M" + " L".join(f"{x},{y}" for x, y in ls.coords)) for ls in mls.geoms)
                 for mls in vectors
             ),
             fill="none",
@@ -201,9 +201,9 @@ def _build_hatch(
     dark_cnt = measure.find_contours(r, levels[1])
     light_cnt = measure.find_contours(r, levels[2])
 
-    light_mls = asMultiLineString(np.empty(shape=(0, 2, 2)))
-    dark_mls = asMultiLineString(np.empty(shape=(0, 2, 2)))
-    black_mls = asMultiLineString(np.empty(shape=(0, 2, 2)))
+    light_mls = MultiLineString(np.empty(shape=(0, 2, 2)))
+    dark_mls = MultiLineString(np.empty(shape=(0, 2, 2)))
+    black_mls = MultiLineString(np.empty(shape=(0, 2, 2)))
 
     try:
         black_p = _build_mask(black_cnt)
@@ -228,20 +228,20 @@ def _build_hatch(
         frame = Polygon([(3, 3), (w - 6, 3), (w - 6, h - 6), (3, h - 6)])
 
         light_mls = shapely.ops.linemerge(
-            asMultiLineString(light_lines).difference(light_p).intersection(frame)
+            MultiLineString(light_lines).difference(light_p).intersection(frame)
         )
         dark_mls = shapely.ops.linemerge(
-            asMultiLineString(dark_lines).difference(dark_p).intersection(frame)
+            MultiLineString(dark_lines).difference(dark_p).intersection(frame)
         )
         black_mls = shapely.ops.linemerge(
-            asMultiLineString(black_lines).difference(black_p).intersection(frame)
+            MultiLineString(black_lines).difference(black_p).intersection(frame)
         )
     except Exception as exc:
         print(f"Error: {exc}")
 
     return (
         MultiLineString(
-            [ls for ls in light_mls] + [ls for ls in dark_mls] + [ls for ls in black_mls]
+            [ls for ls in light_mls.geoms] + [ls for ls in dark_mls.geoms] + [ls for ls in black_mls.geoms]
         ),
         black_cnt,
         dark_cnt,
@@ -338,7 +338,7 @@ def hatch(
 
         plt.gca().add_collection(
             matplotlib.collections.LineCollection(
-                (ls.coords for ls in mls), color=color, lw=0.3
+                (ls.coords for ls in mls.geoms), color=color, lw=0.3
             )
         )
 

@@ -103,7 +103,7 @@ def _build_diagonal_hatch(delta: float, offset: float, w: int, h: int, angle: fl
                 stop = (w, j)
 
             lines.append([start, stop])
-    return np.array(lines)
+    return lines
 
 
 def _plot_poly(geom, colspec=""):
@@ -220,7 +220,7 @@ def _build_hatch(
             extra_args["angle"] = hatch_angle
             build_func = _build_diagonal_hatch
             # correct offset to ensure desired distance between hatches
-            if hatch_angle != 0:
+            if hatch_angle % 180 != 0:
                 hatch_pitch /= math.sin((hatch_angle % 180) * math.pi / 180)
 
         light_lines = build_func(4 * hatch_pitch, 0, w, h, **extra_args)

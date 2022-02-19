@@ -1,15 +1,15 @@
 import math
 import os
 import random
-from typing import Tuple, Iterable, Any
+from typing import Any, Iterable, Tuple
 
 import cv2
-import matplotlib.pyplot as plt
 import matplotlib.collections
+import matplotlib.pyplot as plt
 import numpy as np
 import shapely.ops
 import svgwrite as svgwrite
-from shapely.geometry import Polygon, LinearRing, MultiLineString
+from shapely.geometry import LinearRing, MultiLineString, Polygon
 from skimage import measure
 
 
@@ -142,7 +142,9 @@ def _save_to_svg(file_path: str, w: int, h: int, vectors: Iterable[MultiLineStri
     dwg.add(
         dwg.path(
             " ".join(
-                " ".join(("M" + " L".join(f"{x},{y}" for x, y in ls.coords)) for ls in mls.geoms)
+                " ".join(
+                    ("M" + " L".join(f"{x},{y}" for x, y in ls.coords)) for ls in mls.geoms
+                )
                 for mls in vectors
             ),
             fill="none",
@@ -228,20 +230,28 @@ def _build_hatch(
         frame = Polygon([(3, 3), (w - 6, 3), (w - 6, h - 6), (3, h - 6)])
 
         light_mls = shapely.ops.linemerge(
-            MultiLineString(light_lines).difference(light_p).intersection(frame)
+            MultiLineString([line for line in light_lines])
+            .difference(light_p)
+            .intersection(frame)
         )
         dark_mls = shapely.ops.linemerge(
-            MultiLineString(dark_lines).difference(dark_p).intersection(frame)
+            MultiLineString([line for line in dark_lines])
+            .difference(dark_p)
+            .intersection(frame)
         )
         black_mls = shapely.ops.linemerge(
-            MultiLineString(black_lines).difference(black_p).intersection(frame)
+            MultiLineString([line for line in black_lines])
+            .difference(black_p)
+            .intersection(frame)
         )
     except Exception as exc:
         print(f"Error: {exc}")
 
     return (
         MultiLineString(
-            [ls for ls in light_mls.geoms] + [ls for ls in dark_mls.geoms] + [ls for ls in black_mls.geoms]
+            [ls for ls in light_mls.geoms]
+            + [ls for ls in dark_mls.geoms]
+            + [ls for ls in black_mls.geoms]
         ),
         black_cnt,
         dark_cnt,

@@ -5,5 +5,6 @@ numpy
 matplotlib
 opencv-python
 black
+isort
 click
 vpype

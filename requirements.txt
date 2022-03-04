@@ -7,4 +7,4 @@ opencv-python
 black
 isort
 click
-vpype
+vpype>=1.9,<2.0

@@ -19,7 +19,7 @@ setup(
     packages=find_packages(exclude=("examples", "tests")),
     install_requires=[
         "click",
-        "vpype",
+        "vpype>=1.9,<2.0",
         "scikit-image",
         "svgwrite",
         "shapely>=1.8",

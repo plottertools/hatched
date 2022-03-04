@@ -1,18 +1,20 @@
 import logging
+import pathlib
 
 import click
 import cv2
-import hatched
-
 import vpype as vp
+import vpype_cli
+
+import hatched
 
 
 @click.command("hatched")
-@click.argument("filename", type=click.Path(exists=True))
+@click.argument("filename", type=vpype_cli.PathType(exists=True))
 @click.option(
     "--levels",
     nargs=3,
-    type=int,
+    type=vpype_cli.IntegerType(),
     default=(64, 128, 192),
     help="Pixel value of the 3 thresholds between black, dark, light and white zones (0-255).",
 )
@@ -28,14 +30,14 @@ import vpype as vp
     "-b",
     "--blur",
     default=0,
-    type=int,
+    type=vpype_cli.IntegerType(),
     help="Blur radius to apply to the image before applying thresholds.",
 )
 @click.option(
     "-p",
     "--pitch",
     default=5,
-    type=vp.LengthType(),
+    type=vpype_cli.LengthType(),
     help="Hatching pitch for the densest zones. This option understands supported units.",
 )
 @click.option(
@@ -53,13 +55,16 @@ import vpype as vp
     nargs=2,
     type=float,
     default=(0.5, 0.5),
-    help="Relative coordinates of the circles' origin for circular hatching. Defaults to (0.5, 0.5) for image center.",
+    help=(
+        "Relative coordinates of the circles' origin for circular hatching. Defaults to (0.5, "
+        "0.5) for image center."
+    ),
 )
 @click.option(
     "-a",
     "--angle",
     default=45,
-    type=float,
+    type=vpype_cli.AngleType(),
     help="Hatching angle for diagonal hatches (in degrees)",
 )
 @click.option(
@@ -68,8 +73,10 @@ import vpype as vp
     is_flag=True,
     help="Display the contours and resulting pattern using matplotlib.",
 )
-@vp.generator
+@vpype_cli.generator
+@vpype_cli.pass_state
 def hatched_gen(
+    state: vpype_cli.State,
     filename: str,
     levels,
     scale: float,
@@ -91,6 +98,10 @@ def hatched_gen(
     box. The `--pitch` parameter sets the densest hatching frequency,
     """
     logging.info(f"generating hatches from {filename}")
+
+    # this should be dealt with by add_to_source() in a future release
+    state.document.set_property(vp.METADATA_FIELD_SOURCE, pathlib.Path(filename).absolute())
+    state.document.add_to_sources(filename)
 
     interp = cv2.INTER_LINEAR
     if interpolation == "nearest":

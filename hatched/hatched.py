@@ -190,7 +190,7 @@ def _build_hatch(
     circular: bool = False,
     center: Tuple[float, float] = (0.5, 0.5),
     invert: bool = False,
-    hatch_angle: Union[float, Tuple[float]] = 45,
+    hatch_angle: float = 45,
 ) -> Tuple[MultiLineString, Any, Any, Any]:
 
     if not isinstance(levels, Tuple):
@@ -235,16 +235,13 @@ def _build_hatch(
             ]
         else:
             extra_args["angle"] = hatch_angle
-            if not isinstance(hatch_angle, Tuple):
-                hatch_angle = (hatch_angle,)*n_levels
-
             lines = [
                 _build_diagonal_hatch(
                     delta_factors[i] * hatch_pitch,
                     offset_factors[i] * hatch_pitch,
                     w,
                     h,
-                    angle=hatch_angle[i],
+                    angle=hatch_angle,
                 )
                 for i in range(n_levels)
             ]
@@ -282,7 +279,7 @@ def hatch(
     invert: bool = False,
     circular: bool = False,
     center: Tuple[float, float] = (0.5, 0.5),
-    hatch_angle: Union[float, Tuple[float]] = 45,
+    hatch_angle: float = 45,
     show_plot: bool = True,
     save_svg: bool = True,
 ) -> MultiLineString:
@@ -302,8 +299,7 @@ def hatch(
     :param circular: use circular hatching instead of diagonal
     :param center: relative x and y position for the center of circles when using circular
         hatching. Defaults to (0.5, 0.5) corresponding to the center of the image
-    :param hatch_angle: angle that defines hatching inclination (degrees). To choose an angle
-        per layer, pass a tuple the same size as levels.
+    :param hatch_angle: angle that defines hatching inclination (degrees)
     :param show_plot: display contours and final results with matplotlib
     :param save_svg: controls whether or not an output svg file is created
     :return: MultiLineString Shapely object of the resulting hatch pattern

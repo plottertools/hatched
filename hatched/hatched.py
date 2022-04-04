@@ -213,12 +213,12 @@ def _build_hatch(
 
     try:
         mask = [_build_mask(i) for i in contours[::-1]]
-        
+
         # Spacing considers interleaved lines from different levels
-        delta_factors = [2**(n_levels-1)]
-        delta_factors.extend([2**(n_levels-i) for i in range(1, n_levels)])
+        delta_factors = [2 ** (n_levels - 1)]
+        delta_factors.extend([2 ** (n_levels - i) for i in range(1, n_levels)])
         offset_factors = [0]
-        offset_factors.extend([2**(n_levels-i-1) for i in range(1, n_levels)])
+        offset_factors.extend([2 ** (n_levels - i - 1) for i in range(1, n_levels)])
         extra_args = {}
 
         if circular:
@@ -342,7 +342,7 @@ def hatch(
         def plot_cnt(contours, spec):
             for cnt in contours:
                 plt.plot(cnt[:, 1], cnt[:, 0], spec, linewidth=2)
-        
+
         colors = list(mcolors.BASE_COLORS.keys())
         for i, cnt in enumerate(cnts):
             plot_cnt(cnt, f"{colors[i]}-")

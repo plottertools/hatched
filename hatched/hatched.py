@@ -235,6 +235,10 @@ def _build_hatch(
             ]
         else:
             extra_args["angle"] = hatch_angle
+            # correct offset to ensure desired distance between hatches
+            if hatch_angle % 180 != 0:
+                hatch_pitch /= math.sin((hatch_angle % 180) * math.pi / 180)
+
             lines = [
                 _build_diagonal_hatch(
                     delta_factors[i] * hatch_pitch,
@@ -249,12 +253,12 @@ def _build_hatch(
         frame = Polygon([(3, 3), (w - 6, 3), (w - 6, h - 6), (3, h - 6)])
 
         mls_ = [
-            MultiLineString(lines[i]).difference(mask[i]).intersection(frame)
+            MultiLineString(MultiLineString(lines[i]).difference(mask[i]).intersection(frame))
             for i in range(n_levels)
         ]
 
         mls = [
-            shapely.ops.linemerge([i for i in mls_[j].geoms if i.length >= 2])
+            MultiLineString(shapely.ops.linemerge([i for i in mls_[j].geoms]))
             for j in range(n_levels)
         ]
 

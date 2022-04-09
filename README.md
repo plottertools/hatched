@@ -14,14 +14,19 @@ Built with [OpenCV](https://github.com/skvark/opencv-python), [scikit-image](htt
 
 ### Using with `vpype`
 
-Using `hatched` as a [vpype](https://github.com/abey79/vpype) plug-in is the easiest way to get started. For that,
-simply install `hatched` with the following command, ideally in a virtual environment:
+Using `hatched` as a [vpype](https://github.com/abey79/vpype) plug-in is the easiest way to get started. See _vpype_'s [installation instructions](https://vpype.readthedocs.io/en/latest/install.html) for information on how to install _vpype_.
+
+If *vpype* was installed using pipx, use the following command:
 
 ```bash
-$ pip install git+https://github.com/plottertools/hatched.git#egg=hatched
+$ pipx inject vpype git+https://github.com/abey79/hatched
 ```
 
-`vpype` is automatically installed with `hatched`, so no further steps are required.
+If *vpype* was installed using pip in a virtual environment, activate the virtual environment and use the following command:
+
+```bash
+$ pip install git+https://github.com/abey79/hatched#egg=hatched
+```
 
 You can confirm that the installation was successful with the following command, which also happens to tell you all
 you need to know to use `hatched`:

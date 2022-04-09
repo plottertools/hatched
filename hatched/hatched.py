@@ -219,10 +219,8 @@ def _build_hatch(
         delta_factors.extend([2 ** (n_levels - i) for i in range(1, n_levels)])
         offset_factors = [0]
         offset_factors.extend([2 ** (n_levels - i - 1) for i in range(1, n_levels)])
-        extra_args = {}
 
         if circular:
-            extra_args["center"] = [center for i in range(n_levels)]
             lines = [
                 _build_circular_hatch(
                     delta_factors[i] * hatch_pitch,
@@ -234,7 +232,6 @@ def _build_hatch(
                 for i in range(len(levels))
             ]
         else:
-            extra_args["angle"] = hatch_angle
             # correct offset to ensure desired distance between hatches
             if hatch_angle % 180 != 0:
                 hatch_pitch /= math.sin((hatch_angle % 180) * math.pi / 180)

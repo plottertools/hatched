@@ -184,7 +184,7 @@ def _load_image(
 def _build_hatch(
     img: np.ndarray,
     hatch_pitch: float = 5.0,
-    levels: Union[int, Tuple[int]] = (64, 128, 192),
+    levels: Union[int, Tuple[int, ...]] = (64, 128, 192),
     circular: bool = False,
     center: Tuple[float, float] = (0.5, 0.5),
     invert: bool = False,
@@ -270,7 +270,7 @@ def _build_hatch(
 def hatch(
     file_path: str,
     hatch_pitch: float = 5,
-    levels: Union[int, Tuple[int]] = (64, 128, 192),
+    levels: Union[int, Tuple[int, ...]] = (64, 128, 192),
     blur_radius: int = 10,
     image_scale: float = 1.0,
     interpolation: int = cv2.INTER_LINEAR,

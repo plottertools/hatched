@@ -1,16 +1,16 @@
 import math
 import os
 import random
-from typing import Tuple, Iterable, Any, Union
+from typing import Any, Iterable, Tuple, Union
 
 import cv2
 import matplotlib.collections
-import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+import matplotlib.pyplot as plt
 import numpy as np
 import shapely.ops
 import svgwrite as svgwrite
-from shapely.geometry import Polygon, LinearRing, MultiLineString
+from shapely.geometry import LinearRing, MultiLineString, Polygon
 from skimage import measure
 
 

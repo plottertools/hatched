@@ -19,13 +19,13 @@ Using `hatched` as a [vpype](https://github.com/abey79/vpype) plug-in is the eas
 If *vpype* was installed using pipx, use the following command:
 
 ```bash
-$ pipx inject vpype git+https://github.com/abey79/hatched
+$ pipx inject vpype hatched
 ```
 
 If *vpype* was installed using pip in a virtual environment, activate the virtual environment and use the following command:
 
 ```bash
-$ pip install git+https://github.com/abey79/hatched#egg=hatched
+$ pip install hatched
 ```
 
 You can confirm that the installation was successful with the following command, which also happens to tell you all

@@ -99,8 +99,6 @@ def hatched_gen(
     """
     logging.info(f"generating hatches from {filename}")
 
-    # this should be dealt with by add_to_source() in a future release
-    state.document.set_property(vp.METADATA_FIELD_SOURCE, pathlib.Path(filename).absolute())
     state.document.add_to_sources(filename)
 
     interp = cv2.INTER_LINEAR

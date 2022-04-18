@@ -1,25 +1,22 @@
-from setuptools import find_packages, setup
+from setuptools import setup
 
 with open("README.md") as f:
     readme = f.read()
 
-with open("LICENSE") as f:
-    license_text = f.read()
-
 setup(
     name="hatched",
-    version="0.0.1",
+    version="0.1.0a2",
     description="Convert images to plotter-friendly hatched patterns",
     long_description=readme,
     long_description_content_type="text/markdown",
     author="Antoine Beyeler",
     author_email="abeyeler@gmail.com",
-    url="https://github.com/abey79/hatched",
-    license=license_text,
-    packages=find_packages(exclude=("examples", "tests")),
+    url="https://github.com/plottertools/hatched",
+    packages=["hatched"],
+    setup_requires=["wheel"],
     install_requires=[
         "click",
-        "vpype>=1.9,<2.0",
+        "vpype>=1.10,<2.0",
         "scikit-image",
         "svgwrite",
         "shapely>=1.8",
@@ -30,6 +27,9 @@ setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
+        "Development Status :: 4 - Beta",
+        "Topic :: Multimedia :: Graphics",
+        "Environment :: Plugins",
     ],
     entry_points="""
             [vpype.plugins]

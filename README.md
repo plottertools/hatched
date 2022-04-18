@@ -111,7 +111,7 @@ Call the function `hatched.hatch()` to process your image. It takes the followin
 - `interpolation`: interpolation to apply for scaling (typically either `cv2.INTER_LINEAR` or `cv2.INTER_NEAREST`)
 - `blur_radius`: blurring radius to apply on the input image (0 to disable)
 - `hatch_pitch`: hatching pitch in pixel (corresponds to the densest possible hatching)
-- `levels`: tuple of the 3 thresholds between black, dark, light and white (0-255)
+- `levels`: tuple of the n thresholds for different shades (0-255). The plugin only accepts 3 thresholds, but using as a library it accepts any number.
 - `h_mirror`: apply horizontal mirror on the image if True
 - `invert`: invert pixel value of the input image before processing (in this case, the level thresholds are inverted as well)
 - `circular`: use circular hatching instead of diagonal

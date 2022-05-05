@@ -5,7 +5,7 @@ with open("README.md") as f:
 
 setup(
     name="hatched",
-    version="0.2.0a0",
+    version="0.2.0",
     description="Convert images to plotter-friendly hatched patterns",
     long_description=readme,
     long_description_content_type="text/markdown",

@@ -5,7 +5,7 @@ with open("README.md") as f:
 
 setup(
     name="hatched",
-    version="0.1.0",
+    version="0.2.0a0",
     description="Convert images to plotter-friendly hatched patterns",
     long_description=readme,
     long_description_content_type="text/markdown",
@@ -16,12 +16,12 @@ setup(
     setup_requires=["wheel"],
     install_requires=[
         "click",
-        "vpype>=1.10,<2.0",
+        "vpype[all]>=1.10,<2.0",
         "scikit-image",
         "svgwrite",
         "shapely>=1.8",
         "matplotlib",
-        "opencv-python",
+        "opencv-python-headless",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

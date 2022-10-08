@@ -324,7 +324,7 @@ def hatch(
         circular=circular,
         center=center,
         hatch_angle=hatch_angle,
-        offset=offset
+        offset=offset,
     )
 
     if save_svg:

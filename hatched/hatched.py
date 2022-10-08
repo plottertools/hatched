@@ -189,6 +189,7 @@ def _build_hatch(
     center: Tuple[float, float] = (0.5, 0.5),
     invert: bool = False,
     hatch_angle: float = 45,
+    offset: float = 0.0,
 ) -> Tuple[MultiLineString, Any, Any, Any]:
 
     if not isinstance(levels, Tuple):
@@ -222,7 +223,7 @@ def _build_hatch(
             lines = [
                 _build_circular_hatch(
                     delta_factors[i] * hatch_pitch,
-                    offset_factors[i] * hatch_pitch,
+                    offset_factors[i] * hatch_pitch + offset,
                     w,
                     h,
                     center=center,
@@ -237,7 +238,7 @@ def _build_hatch(
             lines = [
                 _build_diagonal_hatch(
                     delta_factors[i] * hatch_pitch,
-                    offset_factors[i] * hatch_pitch,
+                    offset_factors[i] * hatch_pitch + offset,
                     w,
                     h,
                     angle=hatch_angle,
@@ -270,6 +271,7 @@ def _build_hatch(
 def hatch(
     file_path: str,
     hatch_pitch: float = 5,
+    offset: float = 0.0,
     levels: Union[int, Tuple[int, ...]] = (64, 128, 192),
     blur_radius: int = 10,
     image_scale: float = 1.0,
@@ -287,6 +289,7 @@ def hatch(
     Create hatched shading vector for an image, display it and save it to svg.
     :param file_path: input image path
     :param hatch_pitch: hatching pitch in pixel (correspond to the densest possible hatching)
+    :param offset: defines starting distance to draw first lines (pixel). Defaults to 0.
     :param levels: pixel values of the threshold levels for different shades from black to white (0-255)
     :param blur_radius: blurring radius to apply on the input image (0 to disable)
     :param image_scale: scale factor to apply on the image before processing
@@ -321,6 +324,7 @@ def hatch(
         circular=circular,
         center=center,
         hatch_angle=hatch_angle,
+        offset=offset
     )
 
     if save_svg:

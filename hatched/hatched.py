@@ -208,7 +208,7 @@ def _build_hatch(
     # Find contours at a constant value of 0.8
     contours = [measure.find_contours(r, levels[i]) for i in range(n_levels)]
 
-    mls = [MultiLineString(np.empty(shape=(0, 2, 2))) for i in range(n_levels)]
+    mls = [shapely.from_wkt("MULTILINESTRING EMPTY") for i in range(n_levels)]
 
     try:
         mask = [_build_mask(i) for i in contours[::-1]]
